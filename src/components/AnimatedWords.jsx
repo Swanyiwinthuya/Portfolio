@@ -1,10 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function AnimatedWords({
-  text,
-  wordDelay = 0.06,
-  className = "",
-}) {
+export default function AnimatedWords({ text, wordDelay = 0.06, className = "" }) {
   const words = String(text).trim().split(/\s+/);
 
   return (

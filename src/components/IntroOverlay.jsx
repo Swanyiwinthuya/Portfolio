@@ -8,41 +8,38 @@ export default function IntroOverlay({ onDone }) {
 
   const line1 = useMemo(() => `Hi It's me ${content.fullName}`, []);
   const line2 = useMemo(() => `Hi Everyone Call Me ${content.nickName}`, []);
-  const line3 = useMemo(() => `Hi It's me SwanYi 😄✨`, []);
+  const line3 = useMemo(() => `Hi It's me Swanyi 😄✨`, []);
 
-  // timing controller
   useEffect(() => {
     if (step === 1) {
       const words = line1.split(" ").length;
-      const total = words * 1000 + 700; // 1s per word + small buffer
+      const total = words * 1000 + 900; // 1 sec per word + buffer
       const t = setTimeout(() => setStep(2), total);
       return () => clearTimeout(t);
     }
     if (step === 2) {
-      const t = setTimeout(() => setStep(3), 2600);
+      const t = setTimeout(() => setStep(3), 2400);
       return () => clearTimeout(t);
     }
     if (step === 3) {
-      const t = setTimeout(() => {
-        onDone?.();
-      }, 2600);
+      const t = setTimeout(() => onDone?.(), 2400);
       return () => clearTimeout(t);
     }
   }, [step, line1, onDone]);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        className="overlay"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        {/* decorative sticker */}
-        <div className="overlaySticker" aria-hidden="true" />
+    <motion.div
+      className="overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      {/* Background decoration inside overlay */}
+      <div className="overlayBlob a" aria-hidden="true" />
+      <div className="overlayBlob b" aria-hidden="true" />
 
-        {/* animated text area */}
-        <div className="overlayCenter">
+      <div className="overlayCenter">
+        <div className="overlayCard">
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.div
@@ -52,7 +49,6 @@ export default function IntroOverlay({ onDone }) {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.35 }}
               >
-                {/* 1 second per word */}
                 <AnimatedWords
                   text={line1}
                   wordDelay={1}
@@ -100,8 +96,10 @@ export default function IntroOverlay({ onDone }) {
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.0, ease: "easeInOut" }}
           />
+
+          <p className="overlayHint">Loading your portfolio…</p>
         </div>
-      </motion.div>
-    </AnimatePresence>
+      </div>
+    </motion.div>
   );
 }

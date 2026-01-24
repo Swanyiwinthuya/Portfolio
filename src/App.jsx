@@ -4,6 +4,7 @@ import { content } from "./data/content";
 import SocialRow from "./components/SocialRow";
 import IntroOverlay from "./components/IntroOverlay";
 import AnimatedWords from "./components/AnimatedWords";
+import Divider from "./components/Divider";
 
 const PAGES = {
   HOME: "HOME",
@@ -19,16 +20,6 @@ const pageVariants = {
   exit: { opacity: 0, y: -10, filter: "blur(7px)" },
 };
 
-const listWrap = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-};
-
-const listItem = {
-  hidden: { opacity: 0, y: 10 },
-  show: { opacity: 1, y: 0 },
-};
-
 export default function App() {
   const [page, setPage] = useState(PAGES.HOME);
   const [showIntro, setShowIntro] = useState(true);
@@ -42,12 +33,12 @@ export default function App() {
       <div className="bgBlob two" aria-hidden="true" />
       <div className="cornerSticker" aria-hidden="true" />
 
-      {/* Intro overlay */}
+      {/* Intro */}
       <AnimatePresence>
         {showIntro && <IntroOverlay onDone={() => setShowIntro(false)} />}
       </AnimatePresence>
 
-      {/* Back button */}
+      {/* Back */}
       {!showIntro && page !== PAGES.HOME && (
         <motion.button
           className="backBtn"
@@ -59,7 +50,6 @@ export default function App() {
         </motion.button>
       )}
 
-      {/* Pages */}
       {!showIntro && (
         <AnimatePresence mode="wait">
           {/* HOME */}
@@ -103,7 +93,7 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* ABOUT (spaces fixed by AnimatedWords.jsx) */}
+          {/* ABOUT */}
           {page === PAGES.ABOUT && (
             <motion.div
               key="about"
@@ -115,9 +105,11 @@ export default function App() {
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
               <h2 className="sectionTitle">{content.aboutTitle}</h2>
+              <Divider />
               <AnimatedWords text={content.aboutText} wordDelay={0.03} className="text" />
 
               <h2 className="sectionTitle bigTop">{content.careerTitle}</h2>
+              <Divider />
               <AnimatedWords text={content.careerText} wordDelay={0.03} className="text" />
             </motion.div>
           )}
@@ -134,45 +126,32 @@ export default function App() {
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
               <h1 className="bigHero">{content.roleTitle}</h1>
+              <Divider />
               <AnimatedWords text={content.roleSubtitle} wordDelay={0.05} className="subText" />
 
               <div className="twoCol">
                 <div className="panel">
                   <h3 className="colTitle">Frontend</h3>
-                  <motion.ul
-                    className="skillList"
-                    variants={listWrap}
-                    initial="hidden"
-                    animate="show"
-                  >
+                  <ul className="skillList">
                     {content.skills.frontend.map((s) => (
-                      <motion.li key={s} variants={listItem}>
-                        {s}
-                      </motion.li>
+                      <li key={s}>{s}</li>
                     ))}
-                  </motion.ul>
+                  </ul>
                 </div>
 
                 <div className="panel">
                   <h3 className="colTitle">Backend</h3>
-                  <motion.ul
-                    className="skillList"
-                    variants={listWrap}
-                    initial="hidden"
-                    animate="show"
-                  >
+                  <ul className="skillList">
                     {content.skills.backend.map((s) => (
-                      <motion.li key={s} variants={listItem}>
-                        {s}
-                      </motion.li>
+                      <li key={s}>{s}</li>
                     ))}
-                  </motion.ul>
+                  </ul>
                 </div>
               </div>
             </motion.div>
           )}
 
-          {/* EXPERIENCE (FIXED: stable animation) */}
+          {/* EXPERIENCE (NO motion at all) */}
           {page === PAGES.PROJECTS && (
             <motion.div
               key="projects"
@@ -184,34 +163,25 @@ export default function App() {
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
               <h2 className="sectionTitle">{content.projectsTitle}</h2>
+              <Divider />
 
-              <motion.div
-                className="cards"
-                variants={listWrap}
-                initial="hidden"
-                animate="show"
-              >
+              <div className="cards">
                 {content.projects.map((p) => (
-                  <motion.a
+                  <a
                     key={p.title}
                     className="card"
                     href={p.link}
                     target="_blank"
                     rel="noreferrer"
-                    variants={listItem}
-                    whileHover={{ y: -4 }}
-                    whileTap={{ scale: 0.98 }}
                   >
                     <div className="cardHead">
                       <h3 className="cardTitle">{p.title}</h3>
                       <span className="more">more &gt;</span>
                     </div>
-
-                    {/* plain text to avoid glitch */}
                     <p className="cardText">{p.description}</p>
-                  </motion.a>
+                  </a>
                 ))}
-              </motion.div>
+              </div>
             </motion.div>
           )}
 
@@ -226,6 +196,7 @@ export default function App() {
               exit="exit"
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
+              <Divider />
               <AnimatedWords text={content.contactText} wordDelay={0.08} className="contactText" />
               <SocialRow />
             </motion.div>
