@@ -11,6 +11,7 @@ const PAGES = {
   ABOUT: "ABOUT",
   SKILLS: "SKILLS",
   PROJECTS: "PROJECTS",
+  CERTIFICATES: "CERTIFICATES",
   CONTACT: "CONTACT",
 };
 
@@ -38,7 +39,7 @@ export default function App() {
         {showIntro && <IntroOverlay onDone={() => setShowIntro(false)} />}
       </AnimatePresence>
 
-      {/* Back */}
+      {/* Back Button */}
       {!showIntro && page !== PAGES.HOME && (
         <motion.button
           className="backBtn"
@@ -77,6 +78,7 @@ export default function App() {
                   ["About", PAGES.ABOUT],
                   ["Skills", PAGES.SKILLS],
                   ["Experience", PAGES.PROJECTS],
+                  ["Certificates", PAGES.CERTIFICATES],
                   ["Contact", PAGES.CONTACT],
                 ].map(([label, target]) => (
                   <motion.button
@@ -106,11 +108,19 @@ export default function App() {
             >
               <h2 className="sectionTitle">{content.aboutTitle}</h2>
               <Divider />
-              <AnimatedWords text={content.aboutText} wordDelay={0.03} className="text" />
+              <AnimatedWords
+                text={content.aboutText}
+                wordDelay={0.03}
+                className="text"
+              />
 
               <h2 className="sectionTitle bigTop">{content.careerTitle}</h2>
               <Divider />
-              <AnimatedWords text={content.careerText} wordDelay={0.03} className="text" />
+              <AnimatedWords
+                text={content.careerText}
+                wordDelay={0.03}
+                className="text"
+              />
             </motion.div>
           )}
 
@@ -127,14 +137,18 @@ export default function App() {
             >
               <h1 className="bigHero">{content.roleTitle}</h1>
               <Divider />
-              <AnimatedWords text={content.roleSubtitle} wordDelay={0.05} className="subText" />
+              <AnimatedWords
+                text={content.roleSubtitle}
+                wordDelay={0.05}
+                className="subText"
+              />
 
               <div className="twoCol">
                 <div className="panel">
                   <h3 className="colTitle">Frontend</h3>
                   <ul className="skillList">
-                    {content.skills.frontend.map((s) => (
-                      <li key={s}>{s}</li>
+                    {content.skills.frontend.map((skill) => (
+                      <li key={skill}>{skill}</li>
                     ))}
                   </ul>
                 </div>
@@ -142,8 +156,8 @@ export default function App() {
                 <div className="panel">
                   <h3 className="colTitle">Backend</h3>
                   <ul className="skillList">
-                    {content.skills.backend.map((s) => (
-                      <li key={s}>{s}</li>
+                    {content.skills.backend.map((skill) => (
+                      <li key={skill}>{skill}</li>
                     ))}
                   </ul>
                 </div>
@@ -151,7 +165,7 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* EXPERIENCE (NO motion at all) */}
+          {/* EXPERIENCE / PROJECTS */}
           {page === PAGES.PROJECTS && (
             <motion.div
               key="projects"
@@ -166,19 +180,64 @@ export default function App() {
               <Divider />
 
               <div className="cards">
-                {content.projects.map((p) => (
+                {content.projects.map((project) => (
                   <a
-                    key={p.title}
+                    key={project.title}
                     className="card"
-                    href={p.link}
+                    href={project.link}
                     target="_blank"
                     rel="noreferrer"
                   >
                     <div className="cardHead">
-                      <h3 className="cardTitle">{p.title}</h3>
+                      <h3 className="cardTitle">{project.title}</h3>
                       <span className="more">more &gt;</span>
                     </div>
-                    <p className="cardText">{p.description}</p>
+
+                    <p className="cardText">{project.description}</p>
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* CERTIFICATES */}
+          {page === PAGES.CERTIFICATES && (
+            <motion.div
+              key="certificates"
+              className="screen"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
+              <h2 className="sectionTitle">{content.certificatesTitle}</h2>
+              <Divider />
+
+              <AnimatedWords
+                text={content.certificatesSubtitle}
+                wordDelay={0.03}
+                className="subText"
+              />
+
+              <div className="certificateGrid">
+                {content.certificates.map((certificate) => (
+                  <a
+                    key={certificate.title}
+                    className="certificateCard"
+                    href={certificate.link}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <div className="certificateTop">
+                      <span className="certificateBadge">
+                        {certificate.category}
+                      </span>
+                      <span className="certificateArrow">↗</span>
+                    </div>
+
+                    <h3 className="certificateTitle">{certificate.title}</h3>
+                    <p className="certificateIssuer">{certificate.issuer}</p>
                   </a>
                 ))}
               </div>
@@ -197,7 +256,13 @@ export default function App() {
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
               <Divider />
-              <AnimatedWords text={content.contactText} wordDelay={0.08} className="contactText" />
+
+              <AnimatedWords
+                text={content.contactText}
+                wordDelay={0.08}
+                className="contactText"
+              />
+
               <SocialRow />
             </motion.div>
           )}
