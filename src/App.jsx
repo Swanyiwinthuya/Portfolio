@@ -1,273 +1,30 @@
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { content } from "./data/content";
-import SocialRow from "./components/SocialRow";
-import IntroOverlay from "./components/IntroOverlay";
-import AnimatedWords from "./components/AnimatedWords";
-import Divider from "./components/Divider";
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { FiArrowUpRight, FiArrowRight, FiArrowLeft, FiHome, FiUser, FiCode, FiGrid, FiAward, FiMail, FiGithub, FiLinkedin, FiDownload, FiStar } from 'react-icons/fi';
+import { content } from './data/content';
+import { projects } from './data/projects';
 
-const PAGES = {
-  HOME: "HOME",
-  ABOUT: "ABOUT",
-  SKILLS: "SKILLS",
-  PROJECTS: "PROJECTS",
-  CERTIFICATES: "CERTIFICATES",
-  CONTACT: "CONTACT",
-};
-
-const pageVariants = {
-  initial: { opacity: 0, y: 16, filter: "blur(7px)" },
-  animate: { opacity: 1, y: 0, filter: "blur(0px)" },
-  exit: { opacity: 0, y: -10, filter: "blur(7px)" },
-};
-
-export default function App() {
-  const [page, setPage] = useState(PAGES.HOME);
-  const [showIntro, setShowIntro] = useState(true);
-
-  const go = (next) => setPage(next);
-
-  return (
-    <div className="wrap">
-      {/* Background */}
-      <div className="bgBlob one" aria-hidden="true" />
-      <div className="bgBlob two" aria-hidden="true" />
-      <div className="cornerSticker" aria-hidden="true" />
-
-      {/* Intro */}
-      <AnimatePresence>
-        {showIntro && <IntroOverlay onDone={() => setShowIntro(false)} />}
-      </AnimatePresence>
-
-      {/* Back Button */}
-      {!showIntro && page !== PAGES.HOME && (
-        <motion.button
-          className="backBtn"
-          onClick={() => go(PAGES.HOME)}
-          whileTap={{ scale: 0.96 }}
-          whileHover={{ x: 2 }}
-        >
-          Back
-        </motion.button>
-      )}
-
-      {!showIntro && (
-        <AnimatePresence mode="wait">
-          {/* HOME */}
-          {page === PAGES.HOME && (
-            <motion.div
-              key="home"
-              className="screen centerScreen"
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <motion.h1
-                className="heroTitle"
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45 }}
-              >
-                Hi, I’m <span className="accent">{content.nickName}</span>
-              </motion.h1>
-
-              <div className="menu">
-                {[
-                  ["About", PAGES.ABOUT],
-                  ["Skills", PAGES.SKILLS],
-                  ["Experience", PAGES.PROJECTS],
-                  ["Certificates", PAGES.CERTIFICATES],
-                  ["Contact", PAGES.CONTACT],
-                ].map(([label, target]) => (
-                  <motion.button
-                    key={label}
-                    className="menuItem"
-                    onClick={() => go(target)}
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    {label}
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* ABOUT */}
-          {page === PAGES.ABOUT && (
-            <motion.div
-              key="about"
-              className="screen"
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <h2 className="sectionTitle">{content.aboutTitle}</h2>
-              <Divider />
-              <AnimatedWords
-                text={content.aboutText}
-                wordDelay={0.03}
-                className="text"
-              />
-
-              <h2 className="sectionTitle bigTop">{content.careerTitle}</h2>
-              <Divider />
-              <AnimatedWords
-                text={content.careerText}
-                wordDelay={0.03}
-                className="text"
-              />
-            </motion.div>
-          )}
-
-          {/* SKILLS */}
-          {page === PAGES.SKILLS && (
-            <motion.div
-              key="skills"
-              className="screen"
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <h1 className="bigHero">{content.roleTitle}</h1>
-              <Divider />
-              <AnimatedWords
-                text={content.roleSubtitle}
-                wordDelay={0.05}
-                className="subText"
-              />
-
-              <div className="twoCol">
-                <div className="panel">
-                  <h3 className="colTitle">Frontend</h3>
-                  <ul className="skillList">
-                    {content.skills.frontend.map((skill) => (
-                      <li key={skill}>{skill}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="panel">
-                  <h3 className="colTitle">Backend</h3>
-                  <ul className="skillList">
-                    {content.skills.backend.map((skill) => (
-                      <li key={skill}>{skill}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* EXPERIENCE / PROJECTS */}
-          {page === PAGES.PROJECTS && (
-            <motion.div
-              key="projects"
-              className="screen"
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <h2 className="sectionTitle">{content.projectsTitle}</h2>
-              <Divider />
-
-              <div className="cards">
-                {content.projects.map((project) => (
-                  <a
-                    key={project.title}
-                    className="card"
-                    href={project.link}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <div className="cardHead">
-                      <h3 className="cardTitle">{project.title}</h3>
-                      <span className="more">more &gt;</span>
-                    </div>
-
-                    <p className="cardText">{project.description}</p>
-                  </a>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* CERTIFICATES */}
-          {page === PAGES.CERTIFICATES && (
-            <motion.div
-              key="certificates"
-              className="screen"
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <h2 className="sectionTitle">{content.certificatesTitle}</h2>
-              <Divider />
-
-              <AnimatedWords
-                text={content.certificatesSubtitle}
-                wordDelay={0.03}
-                className="subText"
-              />
-
-              <div className="certificateGrid">
-                {content.certificates.map((certificate) => (
-                  <a
-                    key={certificate.title}
-                    className="certificateCard"
-                    href={certificate.link}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <div className="certificateTop">
-                      <span className="certificateBadge">
-                        {certificate.category}
-                      </span>
-                      <span className="certificateArrow">↗</span>
-                    </div>
-
-                    <h3 className="certificateTitle">{certificate.title}</h3>
-                    <p className="certificateIssuer">{certificate.issuer}</p>
-                  </a>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* CONTACT */}
-          {page === PAGES.CONTACT && (
-            <motion.div
-              key="contact"
-              className="screen contactScreen"
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <Divider />
-
-              <AnimatedWords
-                text={content.contactText}
-                wordDelay={0.08}
-                className="contactText"
-              />
-
-              <SocialRow />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      )}
-    </div>
-  );
+const pages = [{id:'home',label:'Home',icon:FiHome},{id:'about',label:'About',icon:FiUser},{id:'skills',label:'Skills',icon:FiCode},{id:'projects',label:'Projects',icon:FiGrid},{id:'certificates',label:'Certificates',icon:FiAward},{id:'contact',label:'Contact',icon:FiMail}];
+const getPage = () => pages.some(p=>p.id === location.hash.slice(1)) ? location.hash.slice(1) : 'home';
+const certificates = [...content.certificates,{title:'AWS Academy Graduate – Cloud Developing',issuer:'AWS Academy',category:'Cloud Development',link:'https://www.credly.com/badges/c72d4960-b22a-447e-bb84-5c072683822e/linked_in_profile'}];
+function Glass({children,className='',...props}) {
+ const ref=useRef(null);
+ function move(e){const el=ref.current;const box=el.getBoundingClientRect();el.style.setProperty('--mx',`${e.clientX-box.left}px`);el.style.setProperty('--my',`${e.clientY-box.top}px`);}
+ return <div ref={ref} onPointerMove={move} className={`glass ${className}`} {...props}>{children}</div>;
+}
+function Scene(){return <div className="scene" aria-hidden="true"><div className="sky-glow"/><div className="moon"/><div className="moon-halo"/><div className="cloud cloud-one"/><div className="cloud cloud-two"/><div className="stars">{Array.from({length:35},(_,i)=><i key={i} style={{left:`${(i*37+11)%100}%`,top:`${(i*19+4)%62}%`,animationDelay:`${i%5}s`}}/>)}</div><div className="distant-island island-left"/><div className="distant-island island-right"/><div className="ocean"/><div className="moon-path"/><img className="ship" src="/thousand-sunny.png" alt=""/><div className="foreground"/><div className="grain"/></div>}
+function External({href,children,className=''}){return <a className={className} href={href} target="_blank" rel="noopener noreferrer">{children}<FiArrowUpRight aria-hidden="true"/></a>}
+export default function App(){
+ const [page,setPage]=useState(getPage);const reduced=useReducedMotion();const headingRef=useRef(null);
+ useEffect(()=>{const change=()=>{setPage(getPage());window.scrollTo({top:0,behavior:'instant'});};window.addEventListener('hashchange',change);return()=>window.removeEventListener('hashchange',change)},[]);
+ useEffect(()=>{document.title=`${pages.find(p=>p.id===page).label} | Swanyi's World`;if(page!=='home')headingRef.current?.focus({preventScroll:true})},[page]);
+ return <div className="app"><Scene/><a className="skip" href="#page-content" onClick={e=>{e.preventDefault();document.getElementById('page-content')?.focus()}}>Skip to content</a><header className="header"><a className="brand" href="#home">S<span>✦</span><div>SWANYI<small>DEVELOPER’S WORLD</small></div></a><div className="header-right"><span className="location"><i/> BANGKOK, THAILAND</span><a className="resume glass-button" href="/Swan-Yi-Win-Thu-Ya-Resume.pdf" download><FiDownload/> <span>Resume</span></a></div></header><main id="page-content" tabIndex={-1}><AnimatePresence mode="wait"><motion.section onAnimationComplete={()=>{if(page!=='home')headingRef.current?.focus({preventScroll:true})}} key={page} className={`page page-${page}`} initial={reduced?false:{opacity:0,y:18,filter:'blur(6px)'}} animate={{opacity:1,y:0,filter:'blur(0px)'}} exit={reduced?{}:{opacity:0,y:-12,filter:'blur(6px)'}} transition={{duration:.25}}>
+ {page==='home'? <><div className="home-layout"><div className="hero-copy"><span className="eyebrow"><span className="tiny-star">✦</span> A NEW ADVENTURE BEGINS</span><h1>Hi, I’m <span className="full-name">Swan Yi<br/>Win Thu Ya<span className="title-star">✧</span></span></h1><p className="japanese" lang="ja">夢をコードに。<span>Turning dreams into code.</span></p><p className="hero-description">A curious mind. A developer’s heart.<br/>I build thoughtful web experiences, one<br className="desktop-break"/> little adventure at a time.</p><div className="hero-actions"><a className="primary-button" href="#projects">Explore my work <FiArrowRight/></a><a className="secondary-button" href="#about">Meet the developer <FiArrowUpRight/></a></div><div className="hero-social"><External href={content.links.github}><FiGithub/> GitHub</External><span/><External href="https://www.linkedin.com/in/swanyiwinthuya"><FiLinkedin/> LinkedIn</External></div></div><div className="hero-art"><div className="orbit orbit-one"/><div className="orbit orbit-two"/><span className="art-star one">✦</span><span className="art-star two">✧</span><Glass className="character-card"><div className="card-corner">夢 / DREAM</div><img src="/sticker.png" alt="One Piece — an inspiration for my adventure-themed portfolio"/><div className="character-line"/><div className="character-caption"><span>THE JOURNEY IS THE REWARD</span><FiStar/></div></Glass><Glass className="floating-tag tag-one"><span>⌘</span><div>Full-stack developer<small>Ideas → interfaces → APIs</small></div><i/></Glass><Glass className="floating-tag tag-two"><span>✧</span><div>Always leveling up<small>Build. Learn. Repeat.</small></div></Glass><div className="art-coordinates">25° / DREAM BIG · BUILD SMALL</div></div></div><div className="home-bottom"><span>CHOOSE YOUR NEXT CHAPTER <FiArrowRight/></span><div><a href="#projects">01 <b>Selected projects</b> ↗</a><a href="#skills">02 <b>My toolkit</b> ↗</a><a href="#contact">03 <b>Let’s connect</b> ↗</a></div></div></> : <><div className="page-top"><a href="#home" className="back-link"><FiArrowLeft/> Back to my world</a><span className="chapter">CHAPTER {String(pages.findIndex(p=>p.id===page)).padStart(2,'0')} / 05</span></div><div className="page-title"><span className="eyebrow">{({about:'THE PERSON BEHIND THE CODE',skills:'MY ADVENTURE TOOLKIT',projects:'BUILT WITH CURIOSITY',certificates:'MILESTONES ALONG THE WAY',contact:'EVERY ADVENTURE STARTS WITH HELLO'})[page]}</span><h1 tabIndex={-1} ref={headingRef}>{({about:'A little about me',skills:'Skills & superpowers',projects:'My project universe',certificates:'Learning never stops',contact:'Let’s create something'})[page]}<span className="heading-star"> ✦</span></h1><p>{({about:'Curiosity is my compass. Building is how I explore.',skills:'The tools I use to bring ideas to life.',projects:'From first ideas to working applications. Here are a few of my adventures.',certificates:'Small steps, new knowledge, and a growing collection of achievements.',contact:'A new idea, an opportunity, or just a friendly hello — I’d love to hear from you.'})[page]}</p></div>
+ {page==='about'&&<div className="about-grid"><Glass className="about-main"><span className="panel-label">PLAYER PROFILE / 01</span><h2>Swan Yi Win Thu Ya<span>You can call me Swanyi.</span></h2><p>I’m a Computer Science undergraduate at Assumption University in Bangkok. I enjoy understanding how systems work and making them easier for people to use.</p><p>My projects span e-commerce, university IT support, personal finance, document processing, and Android apps. I work across interfaces, APIs, databases, and cloud deployment.</p><p>Beyond the code, I’m drawn to the spirit of adventure: staying curious, learning from challenges, and taking the next step.</p><div className="profile-tags"><span>✧ Curious by nature</span><span>⌘ Builder at heart</span><span>↗ Always learning</span></div></Glass><div className="about-side"><Glass><span className="panel-label">THE CURRENT CHAPTER</span><FiAward className="panel-icon"/><h3>Bachelor of Computer Science</h3><p>Assumption University<br/>Bangkok, Thailand</p><span className="badge">Expected graduation · 2027</span></Glass><Glass><span className="panel-label">NEXT ON THE HORIZON</span><h3>Data meets development</h3><p>Exploring data analysis, Power BI, DAX, and business reporting.</p></Glass></div></div>}
+ {page==='skills'&&<><div className="skills-grid">{[{icon:FiCode,title:'Frontend & mobile',subtitle:'Where ideas become experiences',items:['React','Next.js','JavaScript','TypeScript (basic)','HTML & CSS','Kotlin','Swift']},{icon:FiGrid,title:'Backend & data',subtitle:'The systems behind the screen',items:['Node.js','Express.js','REST APIs','Python','MySQL','MongoDB','SQLite','Prisma']},{icon:FiStar,title:'Cloud & delivery',subtitle:'Taking projects into the world',items:['Microsoft Azure','Google Cloud','AWS fundamentals','Docker','Nginx','Git & GitHub','CI/CD concepts']}].map(({icon:Icon,title,subtitle,items},i)=><Glass key={title} className="skill-panel"><div className="skill-top"><Icon/><span>0{i+1}</span></div><h2>{title}</h2><p>{subtitle}</p><div className="skill-tags">{items.map(x=><span key={x}>{x}</span>)}</div></Glass>)}</div><Glass className="learning-bar"><span>✧ NEXT LEVEL UNLOCKING</span><p>Power BI · DAX · Dimensional data modeling · Kubernetes</p><span className="badge">Currently learning</span></Glass></>}
+ {page==='projects'&&<><div className="project-grid">{projects.map((project,i)=><Glass className={`project-card project-${i}`} key={project.name}><div className="project-banner"><span className="project-number">0{i+1}</span><span className="project-symbol">{['⌘','✧','↗'][i]}</span><span className="banner-name">{['APHRODITE','CAMPUSFIX','EXPENSE TRACKER'][i]}</span><span className="banner-caption">{project.type}</span>{i===0&&<span className="latest">LATEST ADVENTURE</span>}</div><div className="project-body"><span className="panel-label">{project.status||project.type}</span><h2>{project.name}</h2><p>{project.description}</p><ul>{project.details.map(x=><li key={x}>{x}</li>)}</ul><div className="skill-tags">{project.tags.map(x=><span key={x}>{x}</span>)}</div><External href={project.link} className="project-link">Visit website</External></div></Glass>)}</div><div className="extra-projects">{[{name:'OCR Document',text:'Image and PDF uploads, text extraction, document previews, and OCR API integration.',tags:'React · JavaScript · OCR API'},{name:'FridgeChef',text:'A native Android app for managing ingredients and recipes with local persistence.',tags:'Kotlin · Android Studio · SQLite'}].map(p=><Glass key={p.name}><span className="panel-label">SIDE QUEST</span><h3>{p.name}</h3><p>{p.text}</p><small>{p.tags}</small></Glass>)}</div><External href={content.links.github} className="github-more">More adventures on GitHub <FiGithub/></External></>}
+ {page==='certificates'&&<div className="certificate-grid">{certificates.map((cert,i)=><Glass className="certificate" key={cert.title}><div className="certificate-top"><FiAward/><span>{String(i+1).padStart(2,'0')} / ACHIEVEMENT</span></div><span className="badge">{cert.category}</span><h2>{cert.title}</h2><p>{cert.issuer}</p><External href={cert.link}>View credential</External></Glass>)}</div>}
+ {page==='contact'&&<div className="contact-layout"><Glass className="contact-main"><span className="contact-spark">✧</span><span className="panel-label">LET’S START A CONVERSATION</span><h2>Your next idea.<br/>Our next <em>adventure.</em></h2><p>Have a project or an opportunity in mind?<br/>My inbox is a good place to start.</p><a className="email-link" href="mailto:swanyi035@gmail.com">swanyi035@gmail.com <FiArrowUpRight/></a><span className="contact-location"><i/> Based in Bangkok, Thailand</span></Glass><div className="contact-side">{[{title:'GitHub',text:'Explore the things I’m building',link:content.links.github,icon:FiGithub},{title:'LinkedIn',text:'Let’s connect professionally',link:'https://www.linkedin.com/in/swanyiwinthuya',icon:FiLinkedin}].map(({title,text,link,icon:Icon})=><Glass key={title}><Icon className="panel-icon"/><h3>{title}</h3><p>{text}</p><External href={link}>Find me here</External></Glass>)}<a className="resume-card glass-button" href="/Swan-Yi-Win-Thu-Ya-Resume.pdf" download><FiDownload/> Take my resume with you <FiArrowRight/></a></div></div>}
+ </>}
+ </motion.section></AnimatePresence></main><footer><span>© {new Date().getFullYear()} SWANYI <b>✦</b> MADE WITH CURIOSITY</span><span>KEEP EXPLORING. KEEP BUILDING.</span></footer><nav className="dock" aria-label="Main navigation">{pages.map(({id,label,icon:Icon})=><a key={id} href={`#${id}`} className={page===id?'active':''} aria-current={page===id?'page':undefined}><Icon/><span>{label}</span>{page===id&&<motion.i layoutId={reduced?undefined:'dock-light'} className="dock-light"/>}</a>)}</nav></div>
 }

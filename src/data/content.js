@@ -1,5 +1,5 @@
 export const content = {
-  fullName: "SwanyiWinThuYa",
+  fullName: "Swan Yi Win Thu Ya",
   nickName: "Swanyi",
 
   aboutTitle: "About Me",
@@ -94,7 +94,7 @@ export const content = {
       title: "Introduction to Critical Infrastructure Protection",
       issuer: "OPSWAT Academy",
       category: "Critical Infrastructure",
-      link: "https://learn.opswatacademy.com/certificate/NIWpGhcDaQ",
+      link: "https://learn.opswatacademy.com/certificate/NiWpGhcDaQ",
     },
     {
       title: "Introduction to Software Engineering",
@@ -112,6 +112,6 @@ export const content = {
       "https://www.instagram.com/_swanyi_?igsh=MXJmcGxncmswMm15aw%3D%3D&utm_source=qr",
     linkedin:
       "https://www.linkedin.com/in/swan-yi-win-thu-ya-180360395?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
-    email: "swanyiwinthuya@gmail.com",
+    email: "swanyi035@gmail.com",
   },
 };
